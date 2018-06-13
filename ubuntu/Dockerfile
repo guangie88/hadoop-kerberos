@@ -18,10 +18,6 @@ RUN apt-get install -y openssh-server
 # ARG USER=hadoop
 # USER ${USER}
 
-RUN ssh-keygen -t rsa -P '' -f ~/.ssh/id_rsa \
-    && cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys \
-    && chmod 0600 ~/.ssh/authorized_keys
-
 RUN echo "\
 <configuration>\n\
     <property>\n\
@@ -40,9 +36,7 @@ RUN echo "\
 </configuration>"\
 > ${HADOOP_HOME}/etc/hadoop/hdfs-site.xml
 
-RUN hdfs namenode -format \
-    && /etc/init.d/ssh start \
-    && ssh-keyscan -H localhost >> ~/.ssh/known_hosts \
-    && ssh-keyscan -H 0.0.0.0 >> ~/.ssh/known_hosts \
-    && $HADOOP_HOME/sbin/start-dfs.sh \
-    && rm -rf /opt/hadoop/logs/*
+RUN hdfs namenode -format
+COPY ./run.sh /
+
+ENTRYPOINT ["/run.sh"]
