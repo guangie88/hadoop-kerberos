@@ -22,6 +22,7 @@ RUN apk add --no-cache bash curl openjdk8 openssh openssh-server shadow \
     && groupadd -r "${GROUP}" && useradd -rmg "${GROUP}" "${USER}" \
     && curl -SLO http://apache.mirrors.tds.net/hadoop/common/hadoop-${HADOOP_VERS}/hadoop-${HADOOP_VERS}.tar.gz \
     && tar xf hadoop-${HADOOP_VERS}.tar.gz \
+    && rm hadoop-${HADOOP_VERS}.tar.gz \
     && mkdir -p ${HADOOP_HOME} \
     && mv hadoop-${HADOOP_VERS}/* ${HADOOP_HOME} && rmdir hadoop-${HADOOP_VERS} \
     && echo "export JAVA_HOME=$(readlink -f /usr/bin/java | sed 's:bin/java::')" >> ${HADOOP_HOME}/etc/hadoop/hadoop-env.sh \
